@@ -2,6 +2,8 @@
 
 require 'vendor/autoload.php';
 
+session_start();
+
 $app = new Slim\App([
     'settings' => [
         'displayErrorDetails' => true
@@ -9,6 +11,11 @@ $app = new Slim\App([
 ]);
 
 $container = $app->getContainer();
+
+// csrf routine
+$container['csrf'] = function ($c) {
+    return new \Slim\Csrf\Guard;
+};
 
 // Register component on container
 $container['view'] = function ($container) {
@@ -23,9 +30,15 @@ $container['view'] = function ($container) {
     return $view;
 };
 
+$app->add($container->get('csrf'));
+
 $app->get('/', function($request, $response, $args) {
     return $this->view->render($response, 'home.twig');
 });
+
+$app->post('/update', function() {
+    return 'Subsription upgraded.';
+})->setName('update');
 
 $app->run();
 

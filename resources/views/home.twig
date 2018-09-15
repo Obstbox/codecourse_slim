@@ -1,2 +1,12 @@
-home
+{% extends 'layouts/app.twig' %}
+
+{% block countent %}
+
+    <form action="{{ path_for('update') }}" method="post">
+        <button type="submit">Update</button>
+    </form>
+
+{% endblock %}
+
+
 
