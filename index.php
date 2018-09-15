@@ -33,11 +33,23 @@ $container['view'] = function ($container) {
 $app->add($container->get('csrf'));
 
 $app->get('/', function($request, $response, $args) {
-    return $this->view->render($response, 'home.twig');
+    $nameKey  = $this->csrf->getTokenNameKey();
+    $valueKey = $this->csrf->getTokenValueKey();
+    $name  = $request->getAttribute($nameKey);
+    $value = $request->getAttribute($valueKey);
+
+    return $this->view->render($response, 'home.twig', [
+
+        // should be with 'csrf_' prefix
+        'nameKey'  => $nameKey,
+        'valueKey' => $valueKey,
+        'name'  => $name,
+        'value' => $value
+    ]);
 });
 
 $app->post('/update', function() {
-    return 'Subsription upgraded.';
+    return 'Подписка обновлена';
 })->setName('update');
 
 $app->run();

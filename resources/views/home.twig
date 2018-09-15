@@ -3,7 +3,9 @@
 {% block content %}
 
     <form action="{{ path_for('update') }}" method="post">
-        <button type="submit">Update</button>
+        <button type="submit">Обновить</button>
+        <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
+        <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
     </form>
 
 {% endblock %}
