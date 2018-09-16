@@ -26,6 +26,7 @@ $container['view'] = function ($container) {
     // Instantiate and add Slim specific extension
     $basePath = rtrim(str_ireplace('index.php', '', $container->get('request')->getUri()->getBasePath()), '/');
     $view->addExtension(new Slim\Views\TwigExtension($container->get('router'), $basePath));
+    $view->addExtension(new App\Views\CsrfExtension($container->get('csrf')));
 
     return $view;
 };
@@ -33,23 +34,11 @@ $container['view'] = function ($container) {
 $app->add($container->get('csrf'));
 
 $app->get('/', function($request, $response, $args) {
-    $nameKey  = $this->csrf->getTokenNameKey();
-    $valueKey = $this->csrf->getTokenValueKey();
-    $name  = $request->getAttribute($nameKey);
-    $value = $request->getAttribute($valueKey);
-
-    return $this->view->render($response, 'home.twig', [
-
-        // should be with 'csrf_' prefix
-        'nameKey'  => $nameKey,
-        'valueKey' => $valueKey,
-        'name'  => $name,
-        'value' => $value
-    ]);
+    return $this->view->render($response, 'home.twig');
 });
 
 $app->post('/update', function() {
-    return 'Подписка обновлена';
+    return 'Подписка обновлена.';
 })->setName('update');
 
 $app->run();
